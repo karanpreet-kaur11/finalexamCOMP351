@@ -1,4 +1,6 @@
 # Study Tracker — COMP 351 Final Exam
+Student: Karanpreet Kaur  
+Student Number: 300208472
 
 A personal academic task management web application built with Spring Boot,
 Thymeleaf, HTMX, and MySQL.
