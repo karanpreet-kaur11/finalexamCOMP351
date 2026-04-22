@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="taskList" id="task-list">
+
+    <p th:if="${message}" class="alert alert-success" th:text="${message}"></p>
+    <p th:if="${error}"   class="alert alert-danger"  th:text="${error}"></p>
+
+    <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Course</th>
+                <th>Due Date</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="t : ${tasks}">
+                <td th:text="${t.title}"></td>
+                <td th:text="${t.course != null ? t.course.courseCode : ''}"></td>
+                <td th:text="${t.dueDate}"></td>
+                <td th:text="${t.priorityLevel} + ' / 5'"></td>
+                <td>
+                    <span th:if="${t.status == 'COMPLETED'}"
+                          class="badge bg-success">Completed</span>
+                    <span th:if="${t.status == 'IN_PROGRESS'}"
+                          class="badge bg-warning text-dark">In Progress</span>
+                    <span th:if="${t.status == 'PENDING'}"
+                          class="badge bg-primary">Pending</span>
+                    <span th:if="${t.status == 'CANCELLED'}"
+                          class="badge bg-secondary">Cancelled</span>
+                </td>
+                <td style="max-width:200px;font-size:0.85em;color:#555;"
+                    th:text="${t.notes != null ? t.notes : '-'}"></td>
+                <td>
+                    <form th:if="${t.status != 'COMPLETED' && t.status != 'CANCELLED'}"
+                          th:action="@{/tasks/{id}/status(id=${t.id})}"
+                          method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="put">
+                        <select name="newStatus" class="form-select form-select-sm d-inline w-auto">
+                            <option th:if="${t.status == 'PENDING'}"
+                                    value="IN_PROGRESS">In Progress</option>
+                            <option th:if="${t.status == 'IN_PROGRESS'}"
+                                    value="COMPLETED">Completed</option>
+                            <option value="CANCELLED">Cancelled</option>
+                        </select>
+                        <button type="submit"
+                                class="btn btn-sm btn-outline-primary ms-1">
+                            Update
+                        </button>
+                    </form>
+                    <form th:action="@{/tasks/{id}(id=${t.id})}"
+                          method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit"
+                                class="btn btn-sm btn-danger ms-1"
+                                onclick="return confirm('Delete this task?')">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${tasks.isEmpty()}">
+                <td colspan="7" class="text-center text-muted py-3">
+                    No tasks found. Add one above!
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</body>
+</html>

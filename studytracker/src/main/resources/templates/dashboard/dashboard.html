@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Study Tracker - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f0f4f8; }
+        .card { border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        .section-title { color: #1F3864; font-size: 1.2em; font-weight: bold; margin-bottom: 16px; border-bottom: 2px solid #2E75B6; padding-bottom: 8px; }
+        .kpi-card { border-radius: 8px; padding: 20px; text-align: center; color: white; }
+        .kpi-number { font-size: 2.5em; font-weight: bold; }
+        .kpi-label { font-size: 0.9em; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/nav :: navbar}"></div>
+
+<div class="container mt-4">
+
+    <div class="card p-4">
+        <div class="section-title">Dashboard Summary</div>
+
+        <!-- KPIs -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="kpi-card" style="background:#1F3864;">
+                    <div class="kpi-number" th:text="${totalTasks}">0</div>
+                    <div class="kpi-label">Total Tasks</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="kpi-card" style="background:#28a745;">
+                    <div class="kpi-number" th:text="${completedTasks}">0</div>
+                    <div class="kpi-label">Completed</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="kpi-card" style="background:#2E75B6;">
+                    <div class="kpi-number" th:text="${pendingTasks}">0</div>
+                    <div class="kpi-label">Pending</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="kpi-card" style="background:#dc3545;">
+                    <div class="kpi-number" th:text="${overdueTasks}">0</div>
+                    <div class="kpi-label">Overdue</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Group by Course -->
+    <div class="card p-4">
+        <div class="section-title">Tasks by Course</div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Course</th>
+                    <th>Number of Tasks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="row : ${tasksByCourse}">
+                    <td th:text="${row[0]}"></td>
+                    <td th:text="${row[1]}"></td>
+                </tr>
+                <tr th:if="${tasksByCourse.isEmpty()}">
+                    <td colspan="2" class="text-center text-muted">No data yet.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mb-4">
+        <a href="/tasks" class="btn btn-primary px-4">Back to Tasks</a>
+    </div>
+
+</div>
+</body>
+</html>
