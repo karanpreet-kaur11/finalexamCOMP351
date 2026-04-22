@@ -54,15 +54,15 @@
                             Update
                         </button>
                     </form>
-                    <form th:action="@{/tasks/{id}(id=${t.id})}"
-                          method="post" style="display:inline;">
-                        <input type="hidden" name="_method" value="delete">
-                        <button type="submit"
-                                class="btn btn-sm btn-danger ms-1"
-                                onclick="return confirm('Delete this task?')">
-                            Delete
-                        </button>
-                    </form>
+                   <!-- Delete using HTMX DELETE -->
+                    <button type="button"
+                            th:attr="hx-delete='/tasks/' + ${t.id},
+                                    hx-target='#task-list',
+                                    hx-swap='outerHTML',
+                                    hx-confirm='Delete this task?'"
+                            class="btn btn-sm btn-danger ms-1">
+                        Delete
+                    </button>
                 </td>
             </tr>
             <tr th:if="${tasks.isEmpty()}">

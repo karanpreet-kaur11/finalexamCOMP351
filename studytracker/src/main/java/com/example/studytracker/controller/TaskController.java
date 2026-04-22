@@ -89,10 +89,12 @@ public class TaskController {
         return "redirect:/tasks";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes ra) {
+   @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id, Model model) {
         taskService.delete(id);
-        ra.addFlashAttribute("message", "Task deleted.");
-        return "redirect:/tasks";
+        model.addAttribute("tasks", taskService.findAll());
+        model.addAttribute("courses", taskService.findAllCourses());
+        model.addAttribute("message", "Task deleted successfully.");
+        return "fragments/task-list :: taskList";
     }
 }
